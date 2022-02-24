@@ -1,0 +1,1 @@
+print("It ain't me, it ain't me\nIt ain't no millionaire's son,\nno, no It ain't me, it ain't me\nI ain't no fortunate one")
