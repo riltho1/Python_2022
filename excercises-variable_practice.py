@@ -29,4 +29,44 @@ player_score = 200 #16
 player_highscore = 300 #17
 player_laps = 3%2 #18
 player_ammo = 23%30 #19
-player_gear = 
+current_gear = 0 #20
+current_speed = 50 #21
+
+#Modifying Variables
+money = 200
+hat = 20
+top = 30
+pants = 15
+belt = 60
+shoes = 40 #1
+
+#Hat cost
+print(money) #2
+print("Buying a hat will cost.") #3
+print(hat) #4
+print("You have the following amount left over.")#5
+print(money-hat) #6
+
+#Top Cost
+print("A top will cost")
+print(top)
+print("You have the following amount left over.") 
+print(money-hat-top)
+
+#Pants cost
+print("Pants wil cost.")
+print(pants)
+print("You have the following amount left.")
+print(money-hat-top-pants)
+
+#Belt cost
+print("Belts will cost.")
+print(belt)
+print("You have the following amount left.")
+print(money-hat-top-pants-belt)
+
+#Shoes cost
+print("Shoes will cost")
+print(shoes)
+print("You have the following amount left.")
+print(money-hat-top-pants-belt-shoes)
