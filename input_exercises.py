@@ -43,7 +43,17 @@ print(f"The TV will cost {tv_cost*0.8} if there is a 20% off sale\n") #24
 user_bitcoins = float(input(f"How many bitcoins do you have\n")) #25
 bitcoin_cost = (55661.97) #26
 print(f"You have {user_bitcoins} that is worth ${user_bitcoins*bitcoin_cost}") #27
-"""
+
 user_earnings = int(input(f"How much money do you earn a week?\n")) #28
 tax_rate = float(input(f"What is the current tax rate as a decimal?\n")) #29
-print(f"After tax you earn ${user_earnings-user_earnings*tax_rate}")
+print(f"After tax you earn ${user_earnings-user_earnings*tax_rate}") #30
+"""
+book = input("Name a book.\n") #31
+print("\n")
+print(book.upper())
+print(book.lower())
+print(book.title()) #32
+print("\n")
+
+number = int(input("Give me a number.\n")) #33
+print(book*number) #34
