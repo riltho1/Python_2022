@@ -42,15 +42,43 @@ else:
 	print("This is incorrect the awnser is Mel Gibson") #6
 print("\n")
 """
+#This is a script that asks questions and increases your score if you awnser correct
 score = 0
 qustion_1 = input("Whio won the 2019 Champions League?\n")
 if qustion_1.lower() == "liverpool":
-	print(f"Correct that's {score+1} points")
+	score+=1
+	print(f"Correct that's {score} points.\n")
 else:
 	print(f"Wrong the awnser is Liverpool ypu have {score} points.\n")
 
+
 question_2 = input("Who won the 2010 FIFA World Cup?\n")
 if question_2.lower() == "spain":
-	print(f"Correct you have {score+1} points")
+	score+=1
+	print(f"Correct you have {score} points.\n")
 else:
 	print(f"Wrong the awnser is Spain you have {score} points.\n")
+
+
+question_3 = input("Who won the 2015/16 Premier League?\n")
+if question_3.lower() == "leicester city":
+	score+=1
+	print(f"Correct you have {score} points.\n")
+else:
+	print(f"Wrong the awnser is Leicester City you have {score} points.\n")
+
+
+question_4 = input("Who has won the most Champions League titles?\n")
+if question_4.lower() == "real madrid":
+	score+=1
+	print(f"Correct you have {score} points.\n")
+else:
+	print(f"Wrong the awnser is Real Madrid you have {score} points.\n")
+
+
+question_5 = input("What national team won Euro 2016?\n")
+if question_5.lower() == "portugal":
+	score+=1
+	print(f"That's the right awnser you have {score} points.\n")
+else:
+	print(f"Wrong the awnser is Portugal you have {score} points.\n") #7
