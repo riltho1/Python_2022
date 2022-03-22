@@ -1,5 +1,6 @@
 from adventurelib import *
 
+#Room Descriptions
 space = Room("""
 	You are drifting in space. It feels very cold.
 	A slate-blue starsharp sits completely silently to your left,
@@ -41,6 +42,28 @@ escape_pods = Room("""
 	Woosh there goes last escape pod you are stuck.
 	""")
 
+#Creating Room Connections
+
+spaceship.east = hallway
+spaceship.south = quaters
+hallway.east = bridge
+hallway.north = cargo
+quaters.east = mess_hall
+mess_hall.north = hallway
+bridge.south = escape_pods
+cargo.east = docking
+
+@when ("go DIRECTION")
+def travel (direction):
+	global current_room
+	if direction in current_room.exits():
+		current_room = current_room.exit(direction)
+		print(f"You go {direction}.")
+		print(current_room)
+		print(current_room.exits())
+
+
+#Variable
 current_room = space
 
 @when("enter airlock")
@@ -58,6 +81,8 @@ def enter_spaceship():
 		You heave yourself into the spaceship and
 		slam you hand on the button to close the door.
 		""")
+
+@when("look")
 
 def main():
 	start()
