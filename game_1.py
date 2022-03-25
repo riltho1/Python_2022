@@ -9,7 +9,7 @@ space = Room("""
 	""")
 
 spaceship = Room("""
-	The bridge if the spaceship is shiny and white, with thousands
+	The spaceship is shiny and white, with thousands
 	of small, red, blinking lights.
 	""")
 
@@ -64,7 +64,7 @@ red_keycard = Item("a red keycard","keycard","red card","red card")
 red_keycard.description = "It's a red keycard. It probably opens a door or a locker."
 
 spacesuit = Item("spacesuit","old worn spacesuit")
-spaceship.description = "The spacesuit is quite old and worn out."
+spacesuit.description = "The spacesuit is quite old and worn out."
 
 music_player = Item("music player","apple music player")
 music_player.description = "There is an old Apple Music Player that hs some songs from the 2000s"
@@ -76,23 +76,13 @@ cargo.items.add(knife)
 docking.items.add(spacesuit)
 quaters.items.add(music_player)
 
-@when ("go DIRECTION")
-def travel (direction):
-	global current_room
-	if direction in current_room.exits():
-		current_room = current_room.exit(direction)
-		print(f"You go {direction}.")
-		print(current_room)
-		print(current_room.exits())
-
-
-#Variable
+#Variables
 current_room = space
-invetory = Bag()
+inventory = Bag()
 
 #Binds
 @when("enter airlock")
-@when("enter spacehip")
+@when("enter spaceship")
 @when("enter ship")
 def enter_spaceship():
 	global current_room
@@ -101,11 +91,21 @@ def enter_spaceship():
 		say("There is no airlock here")
 		return
 	else:
-		current_room = enter_spaceship
+		current_room = spaceship
 		print("""
 		You heave yourself into the spaceship and
 		slam you hand on the button to close the door.
 		""")
+
+
+@when ("go DIRECTION")
+def travel (direction):
+	global current_room
+	if direction in current_room.exits():
+		current_room = current_room.exit(direction)
+		print(f"You go {direction}.")
+		print(current_room)
+		print(current_room.exits())
 
 @when("look")
 def look():
@@ -120,7 +120,7 @@ def look():
 @when("take ITEM")
 @when("pick up ITEM")
 def pickup(item):
-	if item in current.room.items:
+	if item in current_room.items:
 		t = current_room.items.take(item)
 		inventory.add(t)
 		print(f"You pick up the {item}.")
@@ -135,6 +135,13 @@ def player_inventory():
 	for item in inventory:
 		print(item)
 
+@when("look at ITEM")
+def look_at(item):
+	if item in inventory:
+		t = inventory.find(item)
+		print(t.description)
+	else:
+		print(f"You aren't carrying an {item}")
 def main():
 	start()
 
