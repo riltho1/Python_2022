@@ -28,7 +28,7 @@ book.append(" Maze Runner")
 book.append(" Star Wars Novels")
 print(','.join(book)) #5
 print("\n")
-"""
+
 
 pizza_toppings = []
 user_pt = input("Add a pizza topping\n")
@@ -49,4 +49,13 @@ if user_pt != "":
 user_pt = input("Add a pizza topping\n")
 if user_pt != "":
 	pizza_toppings.append(user_pt)
-print(','.join(pizza_toppings))
+print(','.join(pizza_toppings))#6
+"""
+
+fruits = ["banana", " blueberry", " strawberry", " pineapple", " orange "]
+user_fruits = input("What fruit do you want? ")
+if user_fruits == fruits:
+	print("This friut is avaliable for you")
+else:
+	fruits.append(user_fruits)
+	print(f"This is not avaliable {','.join(fruits)}. Is what we have now.")
