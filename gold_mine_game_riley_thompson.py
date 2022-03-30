@@ -22,7 +22,7 @@ hallway = Room("""
 
 locked_room = Room("""
 	There is a locked room here that requires some sort of key.
-	""")
+	""")#Inside room"The room is empty except for a skeleton on the floor he seems to be holding something?"
 
 rope_room = Room("""
 	There is an empty room that is empty and has a old rope within it.
@@ -57,7 +57,22 @@ hallway_2.west = creature_room
 
 #Defining Items
 
+Item.description = ""#Adds a blank description for each item
 
+gun = Item("a rusty old gun", "a rusty gun", "a gun", "gun")
+gun.description = "The gun is an old rusty revolver which must have been down here for over 30 years."
+
+olden_key = Item("olden key", "a key", "the key", "key")
+olden_key.description = "The key is an old key that has been trying to hide underneath the gold bars."
+
+gold = Item("shiny gold", "the gold", "gold")
+gold.description = "The gold is shiny and looks to be aged like a fine wine."
+
+locket = Item("locket", "matte locket", "old locket,")
+locket.description = "The locket has a image of a man and women smiling togeth presumably man and wife."
+
+rope = Item("rope","old rope")
+rope.description = Item("")
 
 #Binds
 
