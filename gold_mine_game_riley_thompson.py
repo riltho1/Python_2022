@@ -1,4 +1,5 @@
 from adventurelib import *
+Room.items = Bag()
 
 #Room Descriptions
 entry_room = Room("""
@@ -21,8 +22,8 @@ hallway = Room("""
 	You see a hallway has some clay steps with dim lighting to either side.""")
 
 locked_room = Room("""
-	There is a locked room here that requires some sort of key.
-	""")#Inside room"The room is empty except for a skeleton on the floor he seems to be holding something?"
+	The room is empty except for a skeleton on the floor he seems to be holding something?
+	""")#Inside room "There is a locked room here that requires some sort of key."
 
 rope_room = Room("""
 	There is an empty room that is empty and has a old rope within it.
@@ -36,7 +37,7 @@ hallway_2 = Room("""
 	As you leave the elevator the cart falls down the shaft behind you.""")
 
 locket_room = Room("""
-	There is a hole in the door that perfectly fits a locket.""")
+	The room is empty except for a helm with a golden sword gleaming in the firelight.""")#Locked Room "There is a hole in the door that perfectly fits a locket."
 
 creature_room = Room("""
 	There is a mysterious breathing sound in the distance. It is unknown where this sound is coming from.
@@ -68,12 +69,32 @@ olden_key.description = "The key is an old key that has been trying to hide unde
 gold = Item("shiny gold", "the gold", "gold")
 gold.description = "The gold is shiny and looks to be aged like a fine wine."
 
+pickaxe = Item("pickaxe", "old pickaxe,","pick","axe")
+pickaxe.description = "The pickaxe is good enough to break a door. However it is is to heavy to carry for long time periods."
+
 locket = Item("locket", "matte locket", "old locket,")
 locket.description = "The locket has a image of a man and women smiling togeth presumably man and wife."
 
 rope = Item("rope","old rope")
-rope.description = Item("")
+rope.description = "The rope is old and worn but is quite long and thin."
 
+golden_sword = Item("golden sword","gold sword","sword")
+golden_sword.description = "The Golden Sword shimmers in the light as you take it for its helm."
+
+#Defining Bags
+
+open_cave.items.add(gun)
+gold_room.items.add(gold)
+gold_room.items.add(olden_key)
+pickaxe_room.items.add(pickaxe)
+locked_room.items.add(locket)
+rope_room.items.add(rope)
+locked_room.items.add(golden_sword)
+
+#Variables
+
+current_room = entry_room
+inventory = Bag()
 #Binds
 
 @when ("go DIRECTION")
