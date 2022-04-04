@@ -67,7 +67,7 @@ spacesuit = Item("spacesuit","old worn spacesuit")
 spacesuit.description = "The spacesuit is quite old and worn out."
 
 music_player = Item("music player","apple music player")
-music_player.description = "There is an old Apple Music Player that hs some songs from the 2000s"
+music_player.description = "There is an old Apple Music Player that haSs some songs from the 2000s"
 
 #Defining Bags
 
@@ -142,6 +142,8 @@ def look_at(item):
 		print(t.description)
 	else:
 		print(f"You aren't carrying an {item}")
+
+
 def main():
 	start()
 

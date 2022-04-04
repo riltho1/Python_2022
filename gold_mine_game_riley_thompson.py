@@ -85,7 +85,6 @@ golden_sword.description = "The Golden Sword shimmers in the light as you take i
 
 open_cave.items.add(gun)
 gold_room.items.add(gold)
-gold_room.items.add(olden_key)
 pickaxe_room.items.add(pickaxe)
 locked_room.items.add(locket)
 rope_room.items.add(rope)
@@ -95,6 +94,8 @@ locked_room.items.add(golden_sword)
 
 current_room = entry_room
 inventory = Bag()
+key_taken = False
+
 #Binds
 
 @when ("go DIRECTION")
@@ -106,6 +107,17 @@ def travel (direction):
 		print(current_room)
 		print(current_room.exits())
 
+@when("get ITEM")
+@when("take ITEM")
+@when("pick up ITEM")
+def pickup(item):
+	if item in current_room.items:
+		t = current_room.items.take(item)
+		inventory.add(t)
+		print(f"You pick up the {item}.")
+	else:
+		print(f"You don't see a {item}")
+
 @when("look")
 def look():
 	print(current_room)
@@ -114,6 +126,20 @@ def look():
 		print("You also see:")
 		for item in current_room.items:
 			print(item)#print out out each item in the room
+
+@when("search gold")
+@when("look at gold")
+@when("move gold")
+def key_taken():
+	global key_taken
+	if current_room == gold_room and key_taken == False:
+		print("You take the gold and an Old Key it located under the gold.")
+		current_room.items.add(olden_key)
+		key_taken == True #This is False so you cannot search again
+	elif current_room == gold_room and key_taken == True:
+		print("You have already search the gold.")
+	else:
+		print("There is no gold to search")
 
 
 
