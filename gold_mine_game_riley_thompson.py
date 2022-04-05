@@ -63,10 +63,10 @@ Item.description = ""#Adds a blank description for each item
 gun = Item("a rusty old gun", "a rusty gun", "a gun", "gun")
 gun.description = "The gun is an old rusty revolver which must have been down here for over 30 years."
 
-olden_key = Item("olden key", "a key", "the key", "key")
+olden_key = Item("olden key", "a key", "the key", "key", "old key")
 olden_key.description = "The key is an old key that has been trying to hide underneath the gold bars."
 
-gold = Item("shiny gold", "the gold", "gold")
+gold = Item("shiny gold", "the gold", "old gold", "gold")
 gold.description = "The gold is shiny and looks to be aged like a fine wine."
 
 pickaxe = Item("pickaxe", "old pickaxe,","pick","axe")
@@ -93,8 +93,8 @@ locked_room.items.add(golden_sword)
 #Variables
 
 current_room = entry_room
-inventory = Bag()
 key_taken = False
+inventory = Bag()
 
 #Binds
 
@@ -115,6 +115,9 @@ def pickup(item):
 		t = current_room.items.take(item)
 		inventory.add(t)
 		print(f"You pick up the {item}.")
+		if t == gold:
+			print("There is an old key under the gold")
+			gold_room.items.add(olden_key)
 	else:
 		print(f"You don't see a {item}")
 
@@ -127,19 +130,20 @@ def look():
 		for item in current_room.items:
 			print(item)#print out out each item in the room
 
+'''
 @when("search gold")
 @when("look at gold")
 @when("move gold")
 def key_taken():
 	global key_taken
 	if current_room == gold_room and key_taken == False:
-		print("You take the gold and an Old Key it located under the gold.")
+		print("You take the gold and an Old Key it located underneath.")
 		current_room.items.add(olden_key)
-		key_taken == True #This is False so you cannot search again
+		key_taken = True #This is False so you cannot search again
 	elif current_room == gold_room and key_taken == True:
 		print("You have already search the gold.")
 	else:
-		print("There is no gold to search")
+		print("There is no gold to search")'''
 
 
 
