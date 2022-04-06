@@ -121,6 +121,14 @@ def pickup(item):
 	else:
 		print(f"You don't see a {item}")
 
+@when("inventory")
+@when("show inventory")
+@when("what is in my pocket")
+def player_inventory():
+	print("You are carrying")
+	for item in inventory:
+		print(item)
+
 @when("look")
 def look():
 	print(current_room)
