@@ -1,7 +1,12 @@
 from adventurelib import *
 Room.items = Bag()
 
+#Adding Directions
+
+Room.add_direction("up","down")
+
 #Room Descriptions
+#Update the later
 entry_room = Room("""
 	You have been closed off from you friends the cave closed behind you.
 	Now you must find you way out or die trying.""")
@@ -23,7 +28,7 @@ hallway = Room("""
 
 locked_room = Room("""
 	The room is empty except for a skeleton on the floor he seems to be holding something?
-	""")#Inside room "There is a locked room here that requires some sort of key."
+	""")#Outside room "There is a locked room here that requires some sort of key."
 
 rope_room = Room("""
 	There is an empty room that is empty and has a old rope within it.
@@ -31,7 +36,7 @@ rope_room = Room("""
 
 elevator = Room("""
 	There is an old cable elevator. It is worn down and one of the door have fallen out.
-	# Do you want to go up?""")
+	Do you want to go up?""")
 
 hallway_2 = Room("""
 	As you leave the elevator the cart falls down the shaft behind you.""")
@@ -45,6 +50,7 @@ creature_room = Room("""
 
 #Defining Room Connection
 
+#The rooms only need to be connected one way.
 entry_room.east = gold_room
 entry_room.north = open_cave
 entry_room.west = pickaxe_room
@@ -52,7 +58,7 @@ pickaxe_room.north = hallway
 hallway.east = rope_room
 hallway.west = locked_room
 hallway.north = elevator
-elevator.north = hallway_2
+elevator.up = hallway_2
 hallway_2.east = locket_room
 hallway_2.west = creature_room 
 
@@ -92,20 +98,29 @@ locked_room.items.add(golden_sword)
 
 #Variables
 
+#Variables are used to assign values
 current_room = entry_room
 key_taken = False
 inventory = Bag()
 
 #Binds
 
+#Binds make the game move between rooms and look around
 @when ("go DIRECTION")
 def travel (direction):
 	global current_room
+	if current_room == locked_room and direction == "west":
+		print("The massive rotting door is locked kinda weird?")
+		return
+
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room)
 		print(current_room.exits())
+
+	
+
 
 @when("get ITEM")
 @when("take ITEM")
@@ -138,7 +153,10 @@ def look():
 		for item in current_room.items:
 			print(item)#print out out each item in the room
 
+
+
 '''
+#This code doesn't work
 @when("search gold")
 @when("look at gold")
 @when("move gold")
@@ -149,7 +167,7 @@ def key_taken():
 		current_room.items.add(olden_key)
 		key_taken = True #This is False so you cannot search again
 	elif current_room == gold_room and key_taken == True:
-		print("You have already search the gold.")
+		print("You have already searched the gold.")
 	else:
 		print("There is no gold to search")'''
 
