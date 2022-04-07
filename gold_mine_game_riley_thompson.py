@@ -5,6 +5,8 @@ Room.items = Bag()
 
 Room.add_direction("up","down")
 
+print("You have decided to go on a trip to an abandoned gold mine with your friends. You get on the plane and head off to Spain. You have chanrged ahead of your friends and have been barricaded in on oppposite sides. You must find a way to get out. ")
+
 #Room Descriptions
 #Update the later
 entry_room = Room("""
@@ -109,16 +111,20 @@ inventory = Bag()
 @when ("go DIRECTION")
 def travel (direction):
 	global current_room
-	if current_room == locked_room and direction == "west":
-		print("The massive rotting door is locked kinda weird?")
+
+	if current_room == hallway and direction == 'west':
+		print("The massive rotting door is locked... kinda weird?")
 		return
+	elif current_room == hallway and direction == 'west' and key_taken == True:
+		print(current_room)
 
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room)
 		print(current_room.exits())
-
+	else:
+		print("You cannot go that way.")
 	
 
 
@@ -133,6 +139,7 @@ def pickup(item):
 		if t == gold:
 			print("There is an old key under the gold")
 			gold_room.items.add(olden_key)
+			key_taken == True
 	else:
 		print(f"You don't see a {item}")
 
