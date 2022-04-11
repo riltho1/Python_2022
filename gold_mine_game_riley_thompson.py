@@ -96,7 +96,7 @@ gold_room.items.add(gold)
 pickaxe_room.items.add(pickaxe)
 locked_room.items.add(locket)
 rope_room.items.add(rope)
-locked_room.items.add(golden_sword)
+locket_room.items.add(golden_sword)
 
 #Variables
 
@@ -111,14 +111,21 @@ inventory = Bag()
 @when ("go DIRECTION")
 def travel (direction):
 	global current_room
-
-	if current_room == hallway and direction == 'west':
-		print("The massive rotting door is locked... kinda weird?")
+	global key_taken
+	if current_room == hallway and direction == 'west' and key_taken == False:
+		print("The door is locked")	
 		return
-	elif current_room == hallway and direction == 'west' and key_taken == True:
+	if current_room == hallway and direction == 'west' and key_taken == True:
+		current_room == locked_room
 		print(current_room)
 
-	if direction in current_room.exits():
+
+	#if current_room == hallway and direction == 'west':
+	#	print("The massive rotting door is locked... kinda weird?")
+	#	return
+	
+
+	elif direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room)
@@ -132,6 +139,7 @@ def travel (direction):
 @when("take ITEM")
 @when("pick up ITEM")
 def pickup(item):
+	global key_taken
 	if item in current_room.items:
 		t = current_room.items.take(item)
 		inventory.add(t)
@@ -139,7 +147,7 @@ def pickup(item):
 		if t == gold:
 			print("There is an old key under the gold")
 			gold_room.items.add(olden_key)
-			key_taken == True
+			key_taken = True
 	else:
 		print(f"You don't see a {item}")
 
