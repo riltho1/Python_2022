@@ -28,6 +28,7 @@ pickaxe_room = Room("""
 hallway = Room("""
 	You see a hallway has some clay steps with dim lighting to either side.""")
 
+
 locked_room = Room("""
 	The room is empty except for a skeleton on the floor he seems to be holding something?
 	""")#Outside room "There is a locked room here that requires some sort of key."
@@ -58,11 +59,11 @@ entry_room.north = open_cave
 entry_room.west = pickaxe_room
 pickaxe_room.north = hallway
 hallway.east = rope_room
-hallway.west = locked_room
 hallway.north = elevator
 elevator.up = hallway_2
 hallway_2.east = locket_room
 hallway_2.west = creature_room 
+locked_room.east = hallway
 
 #Defining Items
 
@@ -94,7 +95,6 @@ golden_sword.description = "The Golden Sword shimmers in the light as you take i
 open_cave.items.add(gun)
 gold_room.items.add(gold)
 pickaxe_room.items.add(pickaxe)
-locked_room.items.add(locket)
 rope_room.items.add(rope)
 locket_room.items.add(golden_sword)
 
@@ -104,35 +104,49 @@ locket_room.items.add(golden_sword)
 current_room = entry_room
 key_taken = False
 inventory = Bag()
+locked_room_locked=True
 
 #Binds
 
-#Binds make the game move between rooms and look around
+#Binds make the game move between rooms and look around. It gives the user control.
 @when ("go DIRECTION")
 def travel (direction):
 	global current_room
-	global key_taken
-	if current_room == hallway and direction == 'west' and key_taken == False:
+	'''if current_room == hallway and direction == 'west' and key_taken == False:
 		print("The door is locked")	
 		return
-	if current_room == hallway and direction == 'west' and key_taken == True:
+	elif current_room == hallway and direction == 'west' and key_taken == True:
 		current_room == locked_room
-		print(current_room)
+		print(current_room)'''
 
 
-	#if current_room == hallway and direction == 'west':
-	#	print("The massive rotting door is locked... kinda weird?")
-	#	return
-	
-
-	elif direction in current_room.exits():
+	if direction in current_room.exits() and current_room != locked_room:
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room)
 		print(current_room.exits())
+	if direction in current_room.exits() and current_room == locked_room:
+		if locked_room_locked:
+			print('The room is locked')
+		else:
+			current_room = current_room.exit(direction)
+			print(f"You go {direction}.")
+			print(current_room)
+			print(current_room.exits())
 	else:
 		print("You cannot go that way.")
-	
+
+@when("unlock door")
+@when("open door")	
+def unlock_door():
+	global key_taken
+	if current_room == locked_room and key_taken == True and inventory.find("olden key"):
+		#print(locked_room)
+		locked_room_locked=False
+		#
+		#locked_room.items.add(locket)
+	else:
+		print("You cannot go through the door")
 
 
 @when("get ITEM")
@@ -147,7 +161,7 @@ def pickup(item):
 		if t == gold:
 			print("There is an old key under the gold")
 			gold_room.items.add(olden_key)
-			key_taken = True
+			key_taken == True
 	else:
 		print(f"You don't see a {item}")
 
