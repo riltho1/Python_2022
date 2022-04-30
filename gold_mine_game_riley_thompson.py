@@ -1,6 +1,8 @@
 from adventurelib import *
 Room.items = Bag()
 
+import sys
+
 #Adding Directions
 
 Room.add_direction("up","down")
@@ -21,9 +23,8 @@ open_cave = Room("""
 	You enter a cave. In the cave you see a rusty old revolver.
 	Do you want to take it?""")
 
-pickaxe_room = Room("""
-	There is a room with a pickaxe that you can only carry for short periods of time.
-	You must use it to open the door.""")
+broken_room = Room("""
+	There is a door here. However it seems to have been hacked at and destroyed. Weird.""")
 
 hallway = Room("""
 	You see a hallway has some clay steps with dim lighting to either side.""")
@@ -31,39 +32,48 @@ hallway = Room("""
 
 locked_room = Room("""
 	The room is empty except for a skeleton on the floor he seems to be holding something?
-	""")#Outside room "There is a locked room here that requires some sort of key."
+	""")#This room is locked from outside unless you have the Olden Key
 
 rope_room = Room("""
 	There is an empty room that is empty and has a old rope within it.
 	""")
 
 elevator = Room("""
-	There is an old cable elevator. It is worn down and one of the door have fallen out.
+	There is an old cable elevator. It is worn down and one of the doors seem to have fallen off.
 	Do you want to go up?""")
 
 hallway_2 = Room("""
-	As you leave the elevator the cart falls down the shaft behind you.""")
+	As you leave the elevator the cart falls down the shaft behind you. You are stuck up here unless you can find a way to get back down.""")
 
 locket_room = Room("""
-	The room is empty except for a helm with a golden sword gleaming in the firelight.""")#Locked Room "There is a hole in the door that perfectly fits a locket."
+	The room is empty except for a helm with a golden sword gleaming in the firelight.""")#This room is locked unless you have the Locket
 
 creature_room = Room("""
 	There is a mysterious breathing sound in the distance. It is unknown where this sound is coming from.
-	You see the way out but you must pass the dragon from here.""")
+	You see the way out but you must pass the dragon from here.
+	Do you attack it or do you try to sneak past.
+	What will you ATTACK WITH.""")
+
+"""exit_room = Room(""
+	You kill the mysterious creture and manage to find you way out of the cave.
+	Well done you are now free to go."")"""
+
 
 #Defining Room Connection
 
 #The rooms only need to be connected one way.
 entry_room.east = gold_room
 entry_room.north = open_cave
-entry_room.west = pickaxe_room
-pickaxe_room.north = hallway
+entry_room.west = broken_room
+broken_room.north = hallway
 hallway.east = rope_room
+hallway.west = locked_room
 hallway.north = elevator
 elevator.up = hallway_2
 hallway_2.east = locket_room
 hallway_2.west = creature_room 
-locked_room.east = hallway
+"""creature_room.west = exit_room"""
+
 
 #Defining Items
 
@@ -78,8 +88,8 @@ olden_key.description = "The key is an old key that has been trying to hide unde
 gold = Item("shiny gold", "the gold", "old gold", "gold")
 gold.description = "The gold is shiny and looks to be aged like a fine wine."
 
-pickaxe = Item("pickaxe", "old pickaxe,","pick","axe")
-pickaxe.description = "The pickaxe is good enough to break a door. However it is is to heavy to carry for long time periods."
+'''pickaxe = Item("pickaxe", "old pickaxe,","pick","axe")
+pickaxe.description = "The pickaxe is good enough to break a door. However it is is to heavy to carry for long time periods."'''
 
 locket = Item("locket", "matte locket", "old locket,")
 locket.description = "The locket has a image of a man and women smiling togeth presumably man and wife."
@@ -94,17 +104,21 @@ golden_sword.description = "The Golden Sword shimmers in the light as you take i
 
 open_cave.items.add(gun)
 gold_room.items.add(gold)
-pickaxe_room.items.add(pickaxe)
+'''pickaxe_room.items.add(pickaxe)'''
 rope_room.items.add(rope)
-locket_room.items.add(golden_sword)
+
 
 #Variables
 
 #Variables are used to assign values
 current_room = entry_room
 key_taken = False
+locket_taken = False
+rope_taken = False
+sword_taken = False
+"""elevator_taken = False"""
 inventory = Bag()
-locked_room_locked=True
+
 
 #Binds
 
@@ -112,41 +126,48 @@ locked_room_locked=True
 @when ("go DIRECTION")
 def travel (direction):
 	global current_room
-	'''if current_room == hallway and direction == 'west' and key_taken == False:
+	global locket_taken
+	if current_room == hallway and direction == 'west' and key_taken == False:
 		print("The door is locked")	
 		return
 	elif current_room == hallway and direction == 'west' and key_taken == True:
-		current_room == locked_room
-		print(current_room)'''
+		locked_room.items.add(locket)
+		locket_taken = True
+
+	if current_room == hallway_2 and direction == 'east' and locket_taken == False:
+		print("The door is locked")	
+		return
+	elif current_room == hallway_2 and direction == 'east' and locket_taken == True:
+		locket_room.items.add(golden_sword)
+
+	if current_room == hallway_2 and direction == 'down' and rope_taken == False:
+		print("The cart snapped and fell down the elevator shaft. You would need a rope or something to get back down there.")
+		return
+	elif current_room == hallway_2 and direction == 'down' and rope_taken == True:
+		print("You use the rope to get up and down between the elevator")
+
+		#Rope and elevator works room description needs to change when you go down with rope
 
 
-	if direction in current_room.exits() and current_room != locked_room:
+
+	"""if current_room == hallway_2 and direction in current_room.exits() == 'down':
+		current_room = current_room.exit(direction)
+		print(f"You go {direction}.")
+		print(current_room.exits())"""
+
+	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room)
 		print(current_room.exits())
-	if direction in current_room.exits() and current_room == locked_room:
-		if locked_room_locked:
-			print('The room is locked')
-		else:
-			current_room = current_room.exit(direction)
-			print(f"You go {direction}.")
-			print(current_room)
-			print(current_room.exits())
 	else:
 		print("You cannot go that way.")
 
-@when("unlock door")
-@when("open door")	
-def unlock_door():
-	global key_taken
-	if current_room == locked_room and key_taken == True and inventory.find("olden key"):
-		#print(locked_room)
-		locked_room_locked=False
-		#
-		#locked_room.items.add(locket)
-	else:
-		print("You cannot go through the door")
+	"""elif current_room in current_room.exits() and elevator_taken == True:
+		current_room = current_room.exit(direction)
+		print(f"You go {direction}.")
+		print(current_room.exits())"""
+	
 
 
 @when("get ITEM")
@@ -154,6 +175,7 @@ def unlock_door():
 @when("pick up ITEM")
 def pickup(item):
 	global key_taken
+	global rope_taken
 	if item in current_room.items:
 		t = current_room.items.take(item)
 		inventory.add(t)
@@ -161,9 +183,22 @@ def pickup(item):
 		if t == gold:
 			print("There is an old key under the gold")
 			gold_room.items.add(olden_key)
-			key_taken == True
+			key_taken = True
+		if t == rope:
+			rope_taken = True
 	else:
 		print(f"You don't see a {item}")
+
+@when("attack with ITEM")
+def attack_with(item):
+	if inventory.find(item) == golden_sword and current_room == creature_room:
+		print("You use the Golden Sword to kill the creture")
+		sys.exit("You later found your way out after killing the mysterious creture and managed to regroup with you friends. You will never be the same after that day.")
+	else:
+		print("You attacked the creature and instantaniously died")
+		sys.exit("Your friends later managed to get a search party in the cave to find you and your body was found dead with deep wounds. 'What could have done this?' They think to themselves.")
+
+
 
 @when("inventory")
 @when("show inventory")
@@ -182,24 +217,14 @@ def look():
 		for item in current_room.items:
 			print(item)#print out out each item in the room
 
-
-
-'''
-#This code doesn't work
-@when("search gold")
-@when("look at gold")
-@when("move gold")
-def key_taken():
-	global key_taken
-	if current_room == gold_room and key_taken == False:
-		print("You take the gold and an Old Key it located underneath.")
-		current_room.items.add(olden_key)
-		key_taken = True #This is False so you cannot search again
-	elif current_room == gold_room and key_taken == True:
-		print("You have already searched the gold.")
+@when("look at ITEM")
+@when("inspect ITEM")
+def look_at(item):
+	if item in inventory:
+		t = inventory.find(item)
+		print(t.description)
 	else:
-		print("There is no gold to search")'''
-
+		print(f"You aren't carrying an {item}")
 
 
 def main():
