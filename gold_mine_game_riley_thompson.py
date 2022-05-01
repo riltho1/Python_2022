@@ -13,7 +13,8 @@ print("You have decided to go on a trip to an abandoned gold mine with your frie
 #Update the later
 entry_room = Room("""
 	You have been closed off from you friends the cave closed behind you.
-	Now you must find you way out or die trying.""")
+	Now you must find you way out or die trying.
+	You can PICK UP/TAKE items that you find around the mine.""")
 
 gold_room = Room("""
 	You enter a room that is filled to the brim with gold bars.
@@ -57,6 +58,7 @@ creature_room = Room("""
 """exit_room = Room(""
 	You kill the mysterious creture and manage to find you way out of the cave.
 	Well done you are now free to go."")"""
+	#Didn't need this room
 
 
 #Defining Room Connection
@@ -72,7 +74,7 @@ hallway.north = elevator
 elevator.up = hallway_2
 hallway_2.east = locket_room
 hallway_2.west = creature_room 
-"""creature_room.west = exit_room"""
+
 
 
 #Defining Items
@@ -88,9 +90,6 @@ olden_key.description = "The key is an old key that has been trying to hide unde
 gold = Item("shiny gold", "the gold", "old gold", "gold")
 gold.description = "The gold is shiny and looks to be aged like a fine wine."
 
-'''pickaxe = Item("pickaxe", "old pickaxe,","pick","axe")
-pickaxe.description = "The pickaxe is good enough to break a door. However it is is to heavy to carry for long time periods."'''
-
 locket = Item("locket", "matte locket", "old locket,")
 locket.description = "The locket has a image of a man and women smiling togeth presumably man and wife."
 
@@ -102,6 +101,7 @@ golden_sword.description = "The Golden Sword shimmers in the light as you take i
 
 #Defining Bags
 
+#Scrapped the Pickaxe
 open_cave.items.add(gun)
 gold_room.items.add(gold)
 '''pickaxe_room.items.add(pickaxe)'''
@@ -116,7 +116,6 @@ key_taken = False
 locket_taken = False
 rope_taken = False
 sword_taken = False
-"""elevator_taken = False"""
 inventory = Bag()
 
 
@@ -148,12 +147,13 @@ def travel (direction):
 
 		#Rope and elevator works room description needs to change when you go down with rope
 
+	if current_room == creature_room and direction == 'east':
+		print("When you came through the door it slammed loudly behind you unable to be opened")
+		return
+	#This locks the door behind you in the final room
 
 
-	"""if current_room == hallway_2 and direction in current_room.exits() == 'down':
-		current_room = current_room.exit(direction)
-		print(f"You go {direction}.")
-		print(current_room.exits())"""
+
 
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
@@ -162,11 +162,17 @@ def travel (direction):
 		print(current_room.exits())
 	else:
 		print("You cannot go that way.")
-
+#Testing code
 	"""elif current_room in current_room.exits() and elevator_taken == True:
 		current_room = current_room.exit(direction)
 		print(f"You go {direction}.")
 		print(current_room.exits())"""
+
+	"""if current_room == hallway_2 and direction in current_room.exits() == 'down':
+		current_room = current_room.exit(direction)
+		print(f"You go {direction}.")
+		print(current_room.exits())"""
+
 	
 
 
@@ -183,13 +189,17 @@ def pickup(item):
 		if t == gold:
 			print("There is an old key under the gold")
 			gold_room.items.add(olden_key)
+		#When these items are in your inventory the variables the corispond to become true
+		if t == olden_key:
 			key_taken = True
 		if t == rope:
 			rope_taken = True
 	else:
 		print(f"You don't see a {item}")
 
+#This bind is used to end the game and give you one of 2 endings
 @when("attack with ITEM")
+@when("use ITEM")
 def attack_with(item):
 	if inventory.find(item) == golden_sword and current_room == creature_room:
 		print("You use the Golden Sword to kill the creture")
@@ -197,6 +207,7 @@ def attack_with(item):
 	else:
 		print("You attacked the creature and instantaniously died")
 		sys.exit("Your friends later managed to get a search party in the cave to find you and your body was found dead with deep wounds. 'What could have done this?' They think to themselves.")
+
 
 
 
